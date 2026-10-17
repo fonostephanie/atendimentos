@@ -22,6 +22,59 @@
       margin-bottom: 20px;
     }
 	
+/* Esconde o input original */
+#importarArquivo {
+  display: none;
+}
+
+/* Container com fundo cinza claro */
+.backup-container {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  background-color: #f0f0f0; /* cinza claro */
+  padding: 15px 20px;
+  border-radius: 10px;
+  max-width: 300px;     /* largura menor */
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  z-index: 1000;
+}
+
+/* Cabeçalho */
+.backup-container h3 {
+  margin: 0 0 10px 0;
+  font-size: 16px;
+  color: #333;
+  font-family: Segoe UI, sans-serif;
+}
+
+/* Botões lado a lado */
+.acoes-inferior {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+/* Estilo azul claro para ambos */
+.botao-azul {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  cursor: pointer;
+  border: none;
+  color: white;
+  background-color: #4da6ff; /* azul claro */
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.botao-azul:hover {
+  background-color: #1e90ff; /* azul mais forte no hover */
+}
+
+	
 	.incluir,
 .mostrar {
   display: inline-flex;
@@ -237,9 +290,9 @@
 
 <body>
 
-  <div class="titulo">Controle de Atendimentos</div>
 
-  
+
+  <div class="titulo">Controle de Atendimentos</div>
 
   <input
     type="text"
@@ -247,7 +300,6 @@
     placeholder="Nome do paciente"
     autocomplete="off"
   >
-
   <br>
 
 <button
@@ -265,7 +317,6 @@
   <span>Incluir Novo</span>
 </button>
 
-
   <button
   type="button"
   class="mostrar"
@@ -281,9 +332,24 @@
   </svg>
   <span>Mostrar Pacientes</span>
 </button>
+<!-- Container do Backup -->
+<div class="backup-container">
+  <h3>Backup dos pacientes</h3>
+  <div class="acoes-inferior">
+    <button type="button" class="botao-azul" onclick="exportarPacientes()">
+      
+      <span>Exportar</span>
+    </button>
+
+    <label for="importarArquivo" class="botao-azul">
+      
+      <span>Importar</span>
+    </label>
+    <input type="file" id="importarArquivo" onchange="importarPacientes(event)">
+  </div>
+</div>
 
   <div class="valor" id="valorDiv">
-
     <p>Informe o valor do atendimento:</p>
 
     <input
@@ -313,6 +379,7 @@
   </div>
 
   <script>
+  
     function obterPacientes() {
       return JSON.parse(localStorage.getItem("pacientes")) || [];
     }
@@ -325,6 +392,34 @@
       return nome
         .trim()
         .replace(/\s+/g, " ");
+    }
+
+
+  function exportarPacientes() {
+    const pacientes = JSON.parse(localStorage.getItem("pacientes")) || [];
+    if (pacientes.length === 0) {
+      alert("Nenhum paciente cadastrado para exportar.");
+      return;
+    }
+
+    const blob = new Blob([JSON.stringify(pacientes, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "pacientes.json";
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+function importarPacientes(event) {
+      const file = event.target.files[0];
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        pacientes = JSON.parse(e.target.result);
+        localStorage.setItem("pacientes", JSON.stringify(pacientes));
+        alert("Dados importados com sucesso!");
+      };
+      reader.readAsText(file);
     }
 
     function validarNome(nome) {
