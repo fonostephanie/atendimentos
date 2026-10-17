@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Controle de Atendimentos</title>
+
+  <style>
+    body {
+      font-family: Segoe UI, sans-serif;
+      background-color: #E8EAE2;
+      text-align: center;
+      padding: 30px;
+    }
+
+    .titulo {
+      font-size: 28px;
+      font-weight: bold;
+      color: #006400;
+      margin-bottom: 20px;
+    }
+	
+	.incluir,
+.mostrar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+}
+
+.incluir svg,
+.mostrar svg {
+  flex-shrink: 0;
+}
+
+    input {
+      padding: 8px;
+	  font-family: Segoe UI, sans-serif;
+      font-size: 16px;
+      margin: 10px;
+      border: 2px solid #006400;
+      border-radius: 6px;
+      box-sizing: border-box;
+    }
+
+    button {
+      margin: 5px;
+	  font-family: Segoe UI, sans-serif;
+      padding: 10px 18px;
+      font-size: 14px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      color: white;
+    }
+
+    .incluir {
+      background-color: #2e8b57;
+    }
+
+    .incluir:hover {
+      background-color: #006400;
+    }
+
+    .mostrar {
+      background-color: #2e8b57;
+    }
+
+    .mostrar:hover {
+      background-color: #006400;
+    }
+
+    .ver-atendimento {
+      background-color: #1565c0;
+    }
+
+    .ver-atendimento:hover {
+      background-color: #0d47a1;
+    }
+
+    .excluir-paciente {
+      background-color: #c62828;
+    }
+
+    .excluir-paciente:hover {
+      background-color: #8b0000;
+    }
+
+    .valor {
+     font-family: Segoe UI, sans-serif;
+      margin-top: 20px;
+      display: none;
+    }
+#listaPacientes {
+  width: 60%;
+  max-width: 800px;
+  margin: 20px auto 0 auto;
+  padding: 18px 15px 15px 15px;
+  border: none;
+  border-radius: 14px;
+  background-color: #ffffff;
+  display: none;
+  box-sizing: border-box;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+}
+
+#listaPacientes h3 {
+  margin-top: 0;
+  margin-bottom: 12px;
+}
+
+
+  .tabela-pacientes {
+  width: 100%;
+  max-width: 800px;
+  margin: auto;
+
+  /* necessário para os cantos arredondados */
+  border-collapse: separate;
+  border-spacing: 0;
+
+  background-color: #ffffff;
+  border: 1px solid #d9d9d9;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+/* CABEÇALHO */
+.tabela-pacientes th {
+  padding: 12px;
+  background-color: #dff2df;
+  color: #004d00;
+  font-weight: 600;
+  border: none;
+  border-bottom: 1px solid #d0d0d0;
+}
+
+/* CÉLULAS */
+.tabela-pacientes td {
+  padding: 10px;
+  background-color: #ffffff;
+  border: none;
+  border-bottom: 1px solid #e6e6e6;
+}
+
+/* remove a linha da última linha */
+.tabela-pacientes tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* cantos superiores */
+.tabela-pacientes th:first-child {
+  border-radius: 11px 0 0 0;
+}
+
+.tabela-pacientes th:last-child {
+  border-radius: 0 11px 0 0;
+}
+
+/* cantos inferiores */
+.tabela-pacientes tbody tr:last-child td:first-child {
+  border-radius: 0 0 0 11px;
+}
+
+.tabela-pacientes tbody tr:last-child td:last-child {
+  border-radius: 0 0 11px 0;
+}
+    .tabela-pacientes .coluna-nome {
+      width: 55%;
+      text-align: left;
+    }
+
+    .tabela-pacientes .coluna-acoes {
+      width: 45%;
+      text-align: center;
+      white-space: nowrap;
+    }
+	.ver-atendimento,
+.excluir-paciente {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+}
+
+.ver-atendimento svg,
+.excluir-paciente svg {
+  flex-shrink: 0;
+}
+
+    .mensagem-vazia {
+      color: #b00000;
+      font-weight: bold;
+    }
+/* Linha vertical entre Nome e Ações */
+.tabela-pacientes th:first-child,
+.tabela-pacientes td:first-child {
+  border-right: 1px solid #d9d9d9;
+}
+    .assinatura {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      font-size: 14px;
+      color: #333333;
+      font-family: Segoe UI, sans-serif;
+    }
+
+    @media (max-width: 700px) {
+      body {
+        padding: 15px;
+      }
+
+      .tabela-pacientes {
+        width: 100%;
+      }
+
+      .tabela-pacientes .coluna-acoes {
+        white-space: normal;
+      }
+
+      .ver-atendimento,
+      .excluir-paciente {
+        width: 100%;
+        margin: 3px 0;
+      }
+
+      .assinatura {
+        position: static;
+        margin-top: 30px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="titulo">Controle de Atendimentos</div>
+
+  
+
+  <input
+    type="text"
+    id="paciente"
+    placeholder="Nome do paciente"
+    autocomplete="off"
+  >
+
+  <br>
+
+<button
+  type="button"
+  class="incluir"
+  onclick="mostrarValor()"
+>
+  <svg viewBox="0 0 24 24" width="18" height="18"
+       fill="none" stroke="currentColor" stroke-width="2"
+       stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="9"></circle>
+    <line x1="12" y1="8" x2="12" y2="16"></line>
+    <line x1="8" y1="12" x2="16" y2="12"></line>
+  </svg>
+  <span>Incluir Novo</span>
+</button>
+
+
+  <button
+  type="button"
+  class="mostrar"
+  onclick="alternarListaPacientes()"
+>
+  <svg viewBox="0 0 24 24" width="18" height="18"
+       fill="none" stroke="currentColor" stroke-width="2"
+       stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="9" cy="8" r="3"></circle>
+    <path d="M3 19v-2c0-3 2.7-5 6-5s6 2 6 5v2"></path>
+    <circle cx="17" cy="9" r="2"></circle>
+    <path d="M16 14c3 0 5 1.5 5 4"></path>
+  </svg>
+  <span>Mostrar Pacientes</span>
+</button>
+
+  <div class="valor" id="valorDiv">
+
+    <p>Informe o valor do atendimento:</p>
+
+    <input
+      type="number"
+      id="valor"
+      placeholder="Ex: 150"
+      min="0"
+      step="0.01"
+    >
+
+    <br>
+
+    <button
+      type="button"
+      class="incluir"
+      onclick="salvarAtendimento()"
+    >
+      Iniciar Atendimento
+    </button>
+
+  </div>
+
+  <div id="listaPacientes"></div>
+
+  <div class="assinatura">
+    Fga. Stephanie Cherutti da Silva - CRFA 07-11115
+  </div>
+
+  <script>
+    function obterPacientes() {
+      return JSON.parse(localStorage.getItem("pacientes")) || [];
+    }
+
+    function salvarPacientes(pacientes) {
+      localStorage.setItem("pacientes", JSON.stringify(pacientes));
+    }
+
+    function normalizarNome(nome) {
+      return nome
+        .trim()
+        .replace(/\s+/g, " ");
+    }
+
+    function validarNome(nome) {
+      nome = normalizarNome(nome);
+
+      const partes = nome.split(" ").filter(parte => parte !== "");
+
+      if (partes.length < 2) {
+        alert("Favor informar nome e sobrenome!");
+        return false;
+      }
+
+      return true;
+    }
+
+    function mostrarValor() {
+      const campoPaciente = document.getElementById("paciente");
+      const nome = normalizarNome(campoPaciente.value);
+
+      if (!validarNome(nome)) {
+        return;
+      }
+
+      campoPaciente.value = nome;
+
+      document.getElementById("valorDiv").style.display = "block";
+      document.getElementById("valor").focus();
+    }
+
+    function salvarAtendimento() {
+      const campoPaciente = document.getElementById("paciente");
+      const campoValor = document.getElementById("valor");
+
+      const nome = normalizarNome(campoPaciente.value);
+      const valor = parseFloat(campoValor.value);
+
+      if (!validarNome(nome)) {
+        return;
+      }
+
+      if (isNaN(valor) || valor <= 0) {
+        alert("Preencha corretamente o valor do atendimento!");
+        campoValor.focus();
+        return;
+      }
+
+      let pacientes = obterPacientes();
+
+      let paciente = pacientes.find(
+        item => item.nome.toLowerCase() === nome.toLowerCase()
+      );
+
+      const dataHoje = new Date().toLocaleDateString("pt-BR");
+
+      if (paciente) {
+        if (!Array.isArray(paciente.datas)) {
+          paciente.datas = [];
+        }
+
+        paciente.datas.push(dataHoje);
+        paciente.qtd = paciente.datas.length;
+        paciente.total = Number(paciente.total || 0) + valor;
+        paciente.ultimoValor = valor;
+      } else {
+        paciente = {
+          nome: nome,
+          qtd: 1,
+          total: valor,
+          ultimoValor: valor,
+          datas: [dataHoje]
+        };
+
+        pacientes.push(paciente);
+      }
+
+      salvarPacientes(pacientes);
+
+      /*
+        Usa o nome original encontrado no cadastro.
+        Isso evita problema caso o usuário digite o mesmo nome
+        com letras maiúsculas ou minúsculas diferentes.
+      */
+      localStorage.setItem("pacienteAtual", paciente.nome);
+
+      /*
+        Atualiza imediatamente a relação de pacientes,
+        sem necessidade de apertar F5.
+      */
+      mostrarPacientes();
+
+      document.getElementById("valorDiv").style.display = "none";
+      campoValor.value = "";
+      campoPaciente.value = "";
+
+      /*
+        Pequeno intervalo para o navegador atualizar visualmente
+        a tabela antes de abrir o calendario.html.
+      */
+      setTimeout(function () {
+        window.open("calendario.html", "_blank");
+      }, 100);
+    }
+
+    function alternarListaPacientes() {
+      const listaDiv = document.getElementById("listaPacientes");
+
+      if (listaDiv.style.display === "block") {
+        listaDiv.style.display = "none";
+      } else {
+        mostrarPacientes();
+      }
+    }
+
+    function mostrarPacientes() {
+      const listaDiv = document.getElementById("listaPacientes");
+      const pacientes = obterPacientes();
+
+      listaDiv.innerHTML = "";
+
+      const titulo = document.createElement("h3");
+      titulo.style.color = "#006400";
+      titulo.textContent = "Pacientes Atendidos";
+
+      listaDiv.appendChild(titulo);
+
+      if (pacientes.length === 0) {
+        const mensagem = document.createElement("p");
+        mensagem.className = "mensagem-vazia";
+        mensagem.textContent = "Nenhum paciente atendido.";
+
+        listaDiv.appendChild(mensagem);
+        listaDiv.style.display = "block";
+        return;
+      }
+
+      /*
+        Cria uma cópia e ordena alfabeticamente,
+        sem alterar a ordem interna do localStorage.
+      */
+      const pacientesOrdenados = [...pacientes].sort((a, b) =>
+        a.nome.localeCompare(b.nome, "pt-BR", {
+          sensitivity: "base"
+        })
+      );
+
+      const tabela = document.createElement("table");
+      tabela.className = "tabela-pacientes";
+
+      const cabecalho = document.createElement("thead");
+      const linhaCabecalho = document.createElement("tr");
+
+      const colunaNome = document.createElement("th");
+      colunaNome.className = "coluna-nome";
+      colunaNome.textContent = "Nome";
+
+      const colunaAcoes = document.createElement("th");
+      colunaAcoes.className = "coluna-acoes";
+      colunaAcoes.textContent = "Ações";
+
+      linhaCabecalho.appendChild(colunaNome);
+      linhaCabecalho.appendChild(colunaAcoes);
+      cabecalho.appendChild(linhaCabecalho);
+      tabela.appendChild(cabecalho);
+
+      const corpoTabela = document.createElement("tbody");
+
+      pacientesOrdenados.forEach(paciente => {
+        const linha = document.createElement("tr");
+
+        const celulaNome = document.createElement("td");
+        celulaNome.className = "coluna-nome";
+        celulaNome.textContent = paciente.nome
+  .toLowerCase()
+  .replace(/\b\w/g, letra => letra.toUpperCase());
+
+        const celulaAcoes = document.createElement("td");
+        celulaAcoes.className = "coluna-acoes";
+
+        const botaoVer = document.createElement("button");
+        botaoVer.type = "button";
+        botaoVer.className = "ver-atendimento";
+botaoVer.innerHTML = `
+  <svg viewBox="0 0 24 24" width="17" height="17" fill="none"
+       stroke="currentColor" stroke-width="2"
+       stroke-linecap="round" stroke-linejoin="round">
+    <path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"></path>
+    <circle cx="12" cy="12" r="3"></circle>
+  </svg>
+  <span>Ver atendimento</span>
+`;
+        botaoVer.addEventListener("click", function () {
+          verAtendimento(paciente.nome);
+        });
+
+        const botaoExcluir = document.createElement("button");
+        botaoExcluir.type = "button";
+        botaoExcluir.className = "excluir-paciente";
+botaoExcluir.innerHTML = `
+  <svg viewBox="0 0 24 24" width="17" height="17" fill="none"
+       stroke="currentColor" stroke-width="2"
+       stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="3 6 5 6 21 6"></polyline>
+    <path d="M19 6l-1 14H6L5 6"></path>
+    <path d="M8 6V4h8v2"></path>
+    <line x1="10" y1="11" x2="10" y2="17"></line>
+    <line x1="14" y1="11" x2="14" y2="17"></line>
+  </svg>
+  <span>Excluir paciente</span>
+`;
+        botaoExcluir.addEventListener("click", function () {
+          excluirPaciente(paciente.nome);
+        });
+
+        celulaAcoes.appendChild(botaoVer);
+        celulaAcoes.appendChild(botaoExcluir);
+
+        linha.appendChild(celulaNome);
+        linha.appendChild(celulaAcoes);
+
+        corpoTabela.appendChild(linha);
+      });
+
+      tabela.appendChild(corpoTabela);
+      listaDiv.appendChild(tabela);
+      listaDiv.style.display = "block";
+    }
+
+    function verAtendimento(nomePaciente) {
+      const pacientes = obterPacientes();
+
+      const paciente = pacientes.find(
+        item =>
+          item.nome.toLowerCase() === nomePaciente.toLowerCase()
+      );
+
+      if (!paciente) {
+        alert("Paciente não encontrado!");
+        mostrarPacientes();
+        return;
+      }
+
+      localStorage.setItem("pacienteAtual", paciente.nome);
+      window.open("calendario.html", "_blank");
+    }
+
+    function excluirPaciente(nomePaciente) {
+
+  const confirmar = confirm(
+    'Deseja realmente excluir o paciente "' +
+    nomePaciente +
+    '" e todos os seus atendimentos?'
+  );
+
+  // Se clicar em Cancelar, não faz nada
+  if (!confirmar) {
+    return;
+  }
+
+  let pacientes = obterPacientes();
+
+  pacientes = pacientes.filter(
+    item =>
+      item.nome.toLowerCase() !== nomePaciente.toLowerCase()
+  );
+
+  salvarPacientes(pacientes);
+
+  // Localiza os registros complementares desse paciente
+  const chavesParaExcluir = [];
+
+  for (let i = 0; i < localStorage.length; i++) {
+    const chave = localStorage.key(i);
+
+    if (
+      chave &&
+      chave.toLowerCase().startsWith(
+        (nomePaciente + "_").toLowerCase()
+      )
+    ) {
+      chavesParaExcluir.push(chave);
+    }
+  }
+
+  // Exclui os registros complementares
+  chavesParaExcluir.forEach(chave => {
+    localStorage.removeItem(chave);
+  });
+
+  // Remove pacienteAtual caso seja o paciente excluído
+  const pacienteAtual = localStorage.getItem("pacienteAtual");
+
+  if (
+    pacienteAtual &&
+    pacienteAtual.toLowerCase() === nomePaciente.toLowerCase()
+  ) {
+    localStorage.removeItem("pacienteAtual");
+  }
+
+  alert("Paciente excluído com sucesso!");
+
+  // Atualiza a relação automaticamente
+  mostrarPacientes();
+}
+
+    /*
+      Permite apertar Enter no campo de valor
+      para iniciar o atendimento.
+    */
+    document
+      .getElementById("valor")
+      .addEventListener("keydown", function (evento) {
+        if (evento.key === "Enter") {
+          salvarAtendimento();
+        }
+      });
+  </script>
+
+</body>
+</html>

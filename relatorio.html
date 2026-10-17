@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+
+  <title>Relatório de Atendimentos</title>
+
+  <style>
+    body {
+      background-color: #E8EAE2;
+      font-family: "Segoe UI", sans-serif;
+      margin: 20px;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+.frase-rodape {
+  display: flex;
+  align-items: center;
+  width: 100%;
+
+  margin-top: 28px;
+
+  color: #064d28;
+
+  font-family: "Segoe Print", "Lucida Handwriting", cursive;
+  font-size: 16px;
+  font-weight: 400;
+  font-style: italic;
+
+  text-align: center;
+}
+
+.frase-rodape::before,
+.frase-rodape::after {
+  content: "";
+  flex: 1;
+
+  height: 1px;
+  background-color: #064d28;
+  opacity: 0.65;
+}
+
+.frase-rodape span {
+  padding: 0 18px;
+  white-space: nowrap;
+}
+
+    /* CONTAINER PRINCIPAL */
+
+    .container-relatorio {
+      max-width: 800px;
+      width: 100%;
+
+      background-color: #ffffff;
+      padding: 1.2cm;
+
+      border: 4px solid #eeeeee;
+      border-radius: 10px;
+
+      box-shadow:
+        inset 0 0 0 4px #ffffff,
+        inset 0 0 0 8px #006400,
+        0 0 0 1cm #ffffff;
+
+      box-sizing: border-box;
+    }
+
+    /* CABEÇALHO DO PROFISSIONAL */
+
+    .cabecalho-relatorio {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 15px;
+
+      margin-bottom: 25px;
+    }
+
+    .dados-profissional {
+      text-align: left;
+    }
+
+    .nome-profissional {
+      color: #006400;
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .registro-profissional {
+      color: #555555;
+      font-size: 14px;
+      font-weight: normal;
+    }
+
+    /* TÍTULO DO RELATÓRIO */
+
+    .titulo-relatorio {
+      display: flex;
+      align-items: center;
+
+      width: 100%;
+
+      margin: 20px 0 25px 0;
+
+      color: #006400;
+      font-size: 18px;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .titulo-relatorio::before,
+    .titulo-relatorio::after {
+      content: "";
+      flex: 1;
+
+      height: 1px;
+      background-color: #006400;
+    }
+
+    .titulo-relatorio span {
+      padding: 0 18px;
+      white-space: nowrap;
+    }
+
+    /* INFORMAÇÕES DO PACIENTE */
+
+    .info-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+
+      gap: 10px;
+      margin: 20px 0;
+    }
+
+    .info-box {
+      flex: 1;
+      min-width: 180px;
+
+      background-color: #f3faf5;
+
+      border: 1px solid #d9dfdc;
+      border-radius: 10px;
+
+      padding: 14px 12px;
+
+      text-align: center;
+
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+
+      box-sizing: border-box;
+    }
+
+    .info-titulo {
+      margin-bottom: 8px;
+
+      font-weight: 500;
+      font-size: 14px;
+
+      color: #333333;
+    }
+
+    .info-valor {
+      font-size: 16px;
+      color: #006400;
+      font-weight: bold;
+    }
+
+    /* TÍTULO ATENDIMENTOS REALIZADOS */
+
+    .titulo-atendimentos {
+      background-color: #edf7f0;
+      color: #064d28;
+
+      text-align: left;
+
+      font-size: 18px;
+      font-weight: 700;
+
+      padding: 10px 14px;
+      margin-top: 24px;
+      margin-bottom: 8px;
+
+      border-radius: 7px;
+    }
+
+    /* TABELA DE ATENDIMENTOS */
+
+    #tabela {
+      width: 100%;
+      margin-top: 10px;
+
+      border-collapse: separate;
+      border-spacing: 0;
+
+      border: 1px solid #d0d5d2;
+      border-radius: 9px;
+
+      overflow: hidden;
+
+      background-color: #ffffff;
+    }
+
+    /* CABEÇALHO DA TABELA */
+
+    #tabela thead th {
+      background-color: #087333;
+      color: #ffffff;
+
+      font-size: 14px;
+      font-weight: 600;
+
+      padding: 10px 12px;
+
+      text-align: center;
+
+      border-right: 1px solid rgba(255, 255, 255, 0.35);
+      border-bottom: 1px solid #d0d5d2;
+    }
+
+    /* CÉLULAS DA TABELA */
+
+    #tabela tbody td {
+      color: #333333;
+
+      font-size: 14px;
+
+      padding: 10px 12px;
+
+      text-align: center;
+
+      border-right: 1px solid #d0d5d2;
+      border-bottom: 1px solid #d0d5d2;
+    }
+
+    /* PRIMEIRA LINHA: BRANCA */
+
+    #tabela tbody tr:nth-child(odd) td {
+      background-color: #ffffff;
+    }
+
+    /* SEGUNDA LINHA: CINZA-CLARO */
+
+    #tabela tbody tr:nth-child(even) td {
+      background-color: #f2f3f3;
+    }
+
+    /* RETIRA BORDA DA ÚLTIMA COLUNA */
+
+    #tabela th:last-child,
+    #tabela td:last-child {
+      border-right: none;
+    }
+
+    /* RETIRA BORDA DA ÚLTIMA LINHA */
+
+    #tabela tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* CANTOS SUPERIORES */
+
+    #tabela thead th:first-child {
+      border-top-left-radius: 8px;
+    }
+
+    #tabela thead th:last-child {
+      border-top-right-radius: 8px;
+    }
+
+    /* CANTOS INFERIORES */
+
+    #tabela tbody tr:last-child td:first-child {
+      border-bottom-left-radius: 8px;
+    }
+
+    #tabela tbody tr:last-child td:last-child {
+      border-bottom-right-radius: 8px;
+    }
+
+    /* TOTAL */
+
+    .total-box {
+      margin-top: 10px;
+
+      background-color: #E8EAE2;
+
+      padding: 10px 15px;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      border-radius: 6px;
+    }
+
+    .total-label {
+      color: #006400;
+
+      font-weight: bold;
+      font-size: 24px;
+    }
+
+    .total-valor {
+      color: #006400;
+
+      font-weight: bold;
+      font-size: 24px;
+
+      margin-left: 0;
+      text-align: right;
+    }
+
+    /* RODAPÉ */
+
+    .rodape-relatorio {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+
+      margin-top: 16px;
+
+      font-size: 11px;
+      color: #666666;
+    }
+
+    .rodape-data {
+      text-align: left;
+      line-height: 1.5;
+    }
+
+    #dataEmissao {
+      color: #333333;
+      font-weight: bold;
+    }
+
+    .rodape-observacao {
+      max-width: 360px;
+
+      text-align: right;
+      line-height: 1.5;
+    }
+
+    /* BOTÃO DE EMISSÃO */
+
+    .print-btn {
+      display: block;
+
+      margin: 30px auto 0;
+      padding: 10px 20px;
+
+      font-size: 16px;
+
+      background-color: #006400;
+      color: #ffffff;
+
+      border: none;
+      border-radius: 6px;
+
+      cursor: pointer;
+    }
+
+    .print-btn:hover {
+      background-color: #004d00;
+    }
+
+    /* CONFIGURAÇÕES DE IMPRESSÃO */
+
+    @media print {
+      .print-btn {
+        display: none;
+      }
+
+      body {
+        background-color: #ffffff !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container-relatorio">
+
+    <!-- CABEÇALHO -->
+
+    <div class="cabecalho-relatorio">
+
+      <div class="dados-profissional">
+
+        <div class="nome-profissional">
+          Fga. Stephanie Cherutti da Silva
+        </div>
+
+        <div class="registro-profissional">
+          CRFA 07-11115
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- TÍTULO -->
+
+    <div class="titulo-relatorio">
+      <span>RELATÓRIO DE ATENDIMENTO</span>
+    </div>
+
+    <!-- INFORMAÇÕES DO PACIENTE -->
+
+    <div id="info"></div>
+
+    <!-- TÍTULO DOS ATENDIMENTOS -->
+
+    <div class="titulo-atendimentos">
+      Atendimentos Realizados
+    </div>
+
+    <!-- TABELA -->
+
+    <table id="tabela">
+
+      <thead>
+        <tr>
+          <th>Nº</th>
+          <th>Datas</th>
+          <th>Valor</th>
+        </tr>
+      </thead>
+
+      <tbody id="corpoTabela">
+        <!-- As linhas serão inseridas pelo JavaScript -->
+      </tbody>
+
+    </table>
+
+    <!-- TOTAL -->
+
+    <div class="total-box" id="totalBox"></div>
+
+    <!-- RODAPÉ -->
+
+    <div class="rodape-relatorio">
+
+      <div class="rodape-data">
+        <div>Documento Emitido em:</div>
+        <div id="dataEmissao"></div>
+      </div>
+
+      <div class="rodape-observacao">
+        Este relatório apresenta exclusivamente a relação<br>
+        de atendimentos realizados no período informado.
+      </div>
+
+    </div>
+<div class="frase-rodape">
+  <span>Cuidar é transformar vidas</span>
+</div>
+    <!-- BOTÃO -->
+
+    <button
+      type="button"
+      class="print-btn"
+      onclick="emitirPrint()"
+    >
+      EMISSÃO
+    </button>
+
+  </div>
+
+  <!-- BIBLIOTECAS -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  <script>
+    /* RECUPERA OS DADOS DO RELATÓRIO */
+
+    const dados = JSON.parse(
+      localStorage.getItem("relatorioDados")
+    );
+
+    /* VERIFICA SE OS DADOS EXISTEM */
+
+    if (!dados) {
+      document.querySelector(".container-relatorio").innerHTML = `
+        <div style="
+          padding: 30px;
+          text-align: center;
+          color: #8b0000;
+          font-size: 18px;
+          font-weight: bold;
+        ">
+          Não foram encontrados dados para gerar o relatório.
+        </div>
+      `;
+
+      throw new Error(
+        "Os dados do relatório não foram encontrados no localStorage."
+      );
+    }
+
+    /* DATA E HORÁRIO DE EMISSÃO */
+
+const agora = new Date();
+
+const dataEmissao = agora.toLocaleDateString("pt-BR");
+const horaEmissao = agora.toLocaleTimeString("pt-BR", {
+  hour: "2-digit",
+  minute: "2-digit"
+});
+
+document.getElementById("dataEmissao").textContent =
+  `${dataEmissao} às ${horaEmissao}`;
+
+    /* INFORMAÇÕES DO PACIENTE */
+
+    document.getElementById("info").innerHTML = `
+      <div class="info-container">
+
+        <div class="info-box">
+          <div class="info-titulo">
+            Paciente
+          </div>
+
+          <div class="info-valor">
+            ${dados.nomePaciente}
+          </div>
+        </div>
+
+        <div class="info-box">
+          <div class="info-titulo">
+            Período de Atendimento
+          </div>
+
+          <div class="info-valor">
+            ${dados.periodo}
+          </div>
+        </div>
+
+        <div class="info-box">
+          <div class="info-titulo">
+            Qtde. Atendimentos
+          </div>
+
+          <div class="info-valor">
+            ${dados.qtd}
+          </div>
+        </div>
+
+      </div>
+    `;
+
+    /* PREENCHE A TABELA */
+
+    const corpoTabela = document.getElementById("corpoTabela");
+
+    dados.datas.forEach((dataAtendimento, indice) => {
+
+      const linha = document.createElement("tr");
+
+      const valorFormatado =
+        Number(dados.valorAtendimento).toLocaleString(
+          "pt-BR",
+          {
+            style: "currency",
+            currency: "BRL"
+          }
+        );
+
+      linha.innerHTML = `
+        <td>${indice + 1}</td>
+        <td>${dataAtendimento}</td>
+        <td>${valorFormatado}</td>
+      `;
+
+      corpoTabela.appendChild(linha);
+    });
+
+    /* VALOR TOTAL */
+
+    const totalFormatado =
+      Number(dados.total).toLocaleString(
+        "pt-BR",
+        {
+          style: "currency",
+          currency: "BRL"
+        }
+      );
+
+    document.getElementById("totalBox").innerHTML = `
+      <span class="total-label">
+        TOTAL
+      </span>
+
+      <span class="total-valor">
+        ${totalFormatado}
+      </span>
+    `;
+
+    /* EMISSÃO DO PDF */
+
+    async function emitirPrint() {
+
+      const relatorio =
+        document.querySelector(".container-relatorio");
+
+      const botao =
+        document.querySelector(".print-btn");
+
+      try {
+
+        /* Esconde o botão durante a captura */
+
+        botao.style.display = "none";
+
+        /* Aguarda a atualização visual */
+
+        await new Promise(resolve => setTimeout(resolve, 100));
+
+        /* Gera a imagem do relatório */
+
+        const canvas = await html2canvas(
+          relatorio,
+          {
+            scale: 2,
+            backgroundColor: "#ffffff",
+            useCORS: true,
+            logging: false
+          }
+        );
+
+        const imgData =
+          canvas.toDataURL("image/png");
+
+        const imgWidth =
+          canvas.width;
+
+        const imgHeight =
+          canvas.height;
+
+        /* Define a orientação */
+
+        const orientation =
+          imgWidth > imgHeight ? "landscape" : "portrait";
+
+        /* Cria o PDF */
+
+        const pdf = new jspdf.jsPDF({
+          orientation: orientation,
+          unit: "px",
+          format: [imgWidth, imgHeight],
+          hotfixes: ["px_scaling"]
+        });
+
+        /* Adiciona o relatório ao PDF */
+
+        pdf.addImage(
+          imgData,
+          "PNG",
+          0,
+          0,
+          imgWidth,
+          imgHeight
+        );
+
+        /* Limpa caracteres inválidos do nome */
+
+        const nomeArquivo =
+          String(dados.nomePaciente || "Relatorio")
+            .replace(/[\\/:*?"<>|]/g, "")
+            .trim();
+
+        /* Salva o PDF */
+
+        pdf.save(
+          `Relatório - ${nomeArquivo}.pdf`
+        );
+
+      } catch (erro) {
+
+        console.error(
+          "Erro ao gerar o PDF:",
+          erro
+        );
+
+        alert(
+          "Não foi possível gerar o PDF. Verifique o console do navegador."
+        );
+
+      } finally {
+
+        /* Mostra novamente o botão */
+
+        botao.style.display = "block";
+      }
+    }
+  </script>
+
+</body>
+</html>

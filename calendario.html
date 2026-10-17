@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Controle de Atendimentos</title>
+<style>
+  body {
+         font-family: Segoe UI, sans-serif;
+    background-color: #E8EAE2;
+    padding: 20px;
+  }
+  .btn-calendario {
+  background-color: #087333;
+  color: #ffffff;
+  border: 1px solid #087333;
+  border-radius: 7px;
+  padding: 7px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.mes table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.mes table tr:first-child {
+  border-top: 1px solid #b9d5c0;
+  border-bottom: 1px solid #b9d5c0;
+}
+.btn-calendario:hover {
+  background-color: #065c29;
+  border-color: #065c29;
+}
+.grid-meses {
+  background-color: #f0fff0;
+  border: 1px solid #b9d5c0;
+  border-radius: 10px;
+  padding: 0 18px 15px 18px;
+  max-width: 650px;
+  margin: -55px auto 20px auto;
+  overflow: hidden;
+
+  box-shadow: 0 2px 7px rgba(0, 0, 0, 0.05);
+}
+
+#ano {
+         font-family: Segoe UI, sans-serif;
+  width: 70px;
+  height: 32px;
+  padding: 0 6px;
+
+  border: 1px solid #b8c5bb;
+  border-radius: 7px;
+
+  background-color: white;
+  color: #333333;
+
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+
+.titulo-relatorio {
+  background-color: #d5f0dc;
+  color: #087333;
+
+  text-align: center;
+  font-size: 15px;
+  font-weight: bold;
+
+  /* faz a faixa ocupar inclusive a área do padding */
+  margin: 0 -18px 16px -18px;
+  padding: 11px 15px;
+}
+.grid-meses label {
+  font-weight: bold;
+  color: #006400;
+}
+
+.meses-relatorio {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 12px 20px;
+  align-items: center;
+}
+
+.meses-relatorio label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+
+  color: #333333;
+  font-size: 13px;
+  font-weight: 600;
+
+  cursor: pointer;
+  
+}
+
+
+.subtitulo {
+  font-size: 13px;
+  font-weight: 400;
+  color: #6b7280;
+  text-align: left;
+  margin-top: -20px;
+}
+.cabecalho {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 12px;
+  width: 100%;
+  margin: 5px 0 22px 0;
+  text-align: left;
+}
+
+.btn-relatorio {
+  width: 100%;
+
+  margin-top: 16px;
+  padding: 10px 15px;
+
+  background-color: #087333;
+  color: white;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  border: none;
+  border-radius: 7px;
+
+  cursor: pointer;
+}
+
+.btn-relatorio:hover {
+  background-color: #065c29;
+}
+
+.meses-relatorio input[type="checkbox"] {
+  cursor: pointer;
+}
+
+.btn-relatorio {
+  grid-column: span 4; /* botão ocupa toda a largura */
+  margin-top: 15px;
+  padding: 10px;
+  background-color: #006400; /* verde escuro */
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.btn-relatorio:hover {
+  background-color: #004d00; /* verde ainda mais escuro no hover */
+}
+
+  .titulo {
+    font-size: 32px;
+    font-weight: bold;
+    color: #006400;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .info-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin: 20px auto;
+    flex-wrap: wrap;
+  }
+  .info-box {
+    flex: 1;
+    min-width: 200px;
+    background-color: #f0fff0;
+	
+	.info-box {
+  color: #000000;
+}
+    
+    border-radius: 10px;
+    padding: 15px;
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    color: #000000;
+	  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+
+  }
+.info-box span {
+  display: block;
+  margin-top: 10px;
+  font-size: 20px;
+  color: #087333;
+  font-weight: bold;
+  text-transform: none;
+}
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin-top: 20px;
+  }
+  .btn-limpar {
+  background-color: #fff0f0;
+  color: #c62828;
+  border: 1px solid #c62828;
+  border-radius: 7px;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  	  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.btn-limpar:hover {
+  background-color: #ffe0e0;
+  color: #a31515;
+  border-color: #a31515;
+}
+  .mes {
+  border: 1px solid #b9d5c0;
+  border-radius: 8px;
+  padding: 0 6px 8px 6px;
+  background-color: #ffffff;
+  overflow: hidden;
+}
+  .mes h3 {
+  text-align: center;
+
+  background-color: #e1f2e5;
+  color: #087333;
+
+  font-size: 14px;
+  font-weight: 700;
+
+  margin: 0 -6px 8px -6px;
+  padding: 8px 5px;
+}
+  table {
+    margin: 0 auto;
+    border-collapse: collapse;
+  }
+td, th {
+  width: 42px;
+  height: 26px;
+  text-align: center;
+  border: none;
+  cursor: pointer;
+  font-size: 11px;
+}
+
+  }
+  #periodo {
+  font-size: 18px;   /* diminui o tamanho da fonte */
+  text-transform: none; /* garante que não muda maiúscula/minúscula */
+}
+
+}
+#valorAtendimento,
+#valorTotal,
+#totalAtendimentosAno {
+  font-size: 18px;
+}
+.valor-total-box {
+  background: linear-gradient(135deg, #0b7a3e, #064d28);
+  color: white;
+
+  border: none;
+  border-radius: 10px;
+
+  box-shadow: 0 4px 12px rgba(6, 77, 40, 0.20);
+}
+
+.valor-total-box #valorTotal {
+  color: white;
+}
+th {
+  background-color:  #f2f4f3;
+  color: #087333;
+  font-weight: 700;
+    font-size: 14px;
+  border: none;
+}
+
+  td.atendimento {
+  background-color: transparent;
+  color: white;
+  font-weight: bold;
+    position: relative;
+  z-index: 1;
+}
+
+td {
+  background-color: transparent;
+  border: none;
+  color: #333333;
+  font-size: 14px;
+}
+.paciente-valor {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.icone-paciente {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.paciente-valor .info-valor {
+  margin: 0;
+  color: #087333;
+  font-size: 18px;
+  font-weight: 700;
+  text-align: left;
+}
+
+td.atendimento::before {
+  content: "";
+  position: absolute;
+  width: 26px;
+  height: 26px;
+  background-color: #239b56;
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  z-index: -1;
+}
+}
+  .legenda {
+    margin: 20px auto;
+    width: 300px;
+    text-align: center;
+    font-size: 16px;
+  }
+  
+  .legenda span {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+    border: 1px solid #006400;
+  }
+  /* Ícones dos cards de informações */
+.info-titulo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  font-size: 18px;
+  font-weight: bold;
+  color: #000000;
+}
+
+/* SVG */
+.info-titulo svg {
+  width: 20px;
+  height: 20px;
+
+  fill: none;
+  stroke: #087333;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+
+  flex-shrink: 0;
+}
+
+/* Corrige o span do título para não receber
+   a formatação dos valores */
+.info-box .info-titulo span {
+  display: inline;
+  margin-top: 0;
+  font-size: 18px;
+  color: #000000;
+  font-weight: bold;
+}
+
+/* Card Valor Total */
+.valor-total-box .info-titulo span {
+  color: #ffffff;
+}
+
+.valor-total-box .info-titulo svg {
+  stroke: #ffffff;
+}
+</style>
+</head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<body>
+
+
+
+
+<div class="cabecalho">
+  <div class="icone-titulo"></div>
+
+  <div>
+    <div class="titulo">Controle de Atendimentos</div>
+    <div class="subtitulo">
+      Organização e acompanhamento dos pacientes
+    </div>
+  </div>
+</div>
+<div style="margin:20px; text-align:center;">
+<!-- Botão VOLTAR no canto superior direito -->
+<div style="position: absolute; top: 20px; right: 20px;">
+  <button onclick="voltarControle()" id="btnVoltar">Voltar</button>
+</div>
+
+<style>
+  #btnVoltar {
+    padding: 6px 12px;          /* tamanho menor */
+    font-size: 14px;            /* fonte menor */
+    background-color: #333333;  /* cinza escuro */
+    color: white;               /* texto branco */
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  #btnVoltar:hover {
+    background-color: #555555;  /* tom mais claro ao passar o mouse */
+  }
+</style>
+
+<script>
+  function voltarControle() {
+    window.location.href = "controle.html"; // ✅ volta para Controle de Atendimento
+  }
+</script>
+</div>
+
+<div class="info-container">
+
+  <!-- NOME DO PACIENTE -->
+  <div class="info-box">
+    <div class="info-titulo">
+      <svg viewBox="0 0 24 24">
+        <circle cx="12" cy="8" r="4"></circle>
+        <path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"></path>
+      </svg>
+      <span>Nome do Paciente:</span>
+    </div>
+
+    <span id="nomePaciente"></span>
+  </div>
+
+
+  <!-- PERÍODO -->
+  <div class="info-box">
+    <div class="info-titulo">
+      <svg viewBox="0 0 24 24">
+        <rect x="3" y="5" width="18" height="16" rx="2"></rect>
+        <line x1="16" y1="3" x2="16" y2="7"></line>
+        <line x1="8" y1="3" x2="8" y2="7"></line>
+        <line x1="3" y1="10" x2="21" y2="10"></line>
+      </svg>
+      <span>Período de Atendimento:</span>
+    </div>
+
+    <span id="periodo"></span>
+  </div>
+
+
+  <!-- TOTAL DE ATENDIMENTOS -->
+  <div class="info-box">
+    <div class="info-titulo">
+      <svg viewBox="0 0 24 24">
+        <path d="M9 11l3 3L22 4"></path>
+        <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+      </svg>
+      <span>Total de Atendimentos:</span>
+    </div>
+
+    <span id="totalAtendimentosAno"></span>
+  </div>
+
+
+  <!-- VALOR DO ATENDIMENTO -->
+  <div class="info-box">
+    <div class="info-titulo">
+      <svg viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="9"></circle>
+        <path d="M16 8h-6a2 2 0 0 0 0 4h4a2 2 0 0 1 0 4H8"></path>
+        <line x1="12" y1="6" x2="12" y2="18"></line>
+      </svg>
+      <span>Valor do Atendimento:</span>
+    </div>
+
+    <span id="valorAtendimento"></span>
+  </div>
+
+
+  <!-- VALOR TOTAL -->
+  <div class="info-box valor-total-box">
+    <div class="info-titulo info-titulo-total">
+      <svg viewBox="0 0 24 24">
+        <rect x="2" y="6" width="20" height="14" rx="2"></rect>
+        <path d="M16 13h4"></path>
+        <path d="M2 10h20"></path>
+      </svg>
+      <span>Valor Total:</span>
+    </div>
+
+    <span id="valorTotal"></span>
+  </div>
+
+</div>
+<div id="areaRelatorio">
+   <!-- aqui dentro fica todo o conteúdo do relatório -->
+</div>
+
+<label for="ano">Ano:</label>
+<input type="number" id="ano" value="2026">
+<button class="btn-calendario" onclick="gerarAno()">
+  Abrir Calendário
+</button>
+
+<div class="grid" id="gradeCalendarios"></div>
+<div style="text-align:left; margin:20px 0;">
+<button class="btn-limpar" onclick="limparRegistros()">
+  Limpar Registros
+</button>
+  
+</div>
+<div id="selecaoMeses">
+
+  <div class="grid-meses">
+
+    <div class="titulo-relatorio">
+      Selecione os meses para o relatório
+    </div>
+
+    <div class="meses-relatorio">
+
+      <label><input type="checkbox" name="mes" value="0"> JAN</label>
+      <label><input type="checkbox" name="mes" value="1"> FEV</label>
+      <label><input type="checkbox" name="mes" value="2"> MAR</label>
+      <label><input type="checkbox" name="mes" value="3"> ABR</label>
+      <label><input type="checkbox" name="mes" value="4"> MAI</label>
+      <label><input type="checkbox" name="mes" value="5"> JUN</label>
+      <label><input type="checkbox" name="mes" value="6"> JUL</label>
+      <label><input type="checkbox" name="mes" value="7"> AGO</label>
+      <label><input type="checkbox" name="mes" value="8"> SET</label>
+      <label><input type="checkbox" name="mes" value="9"> OUT</label>
+      <label><input type="checkbox" name="mes" value="10"> NOV</label>
+      <label><input type="checkbox" name="mes" value="11"> DEZ</label>
+
+    </div>
+
+    <button
+      type="button"
+      class="btn-relatorio"
+      onclick="gerarRelatorio()"
+    >
+      GERAR RELATÓRIO
+    </button>
+
+  </div>
+
+</div>
+
+
+
+
+<script>
+
+const nomePaciente = localStorage.getItem("pacienteAtual") || "Paciente não informado";
+document.title = nomePaciente;
+document.getElementById("nomePaciente").textContent =
+  nomePaciente
+    .toLowerCase()
+    .replace(/\b\w/g, letra => letra.toUpperCase());
+
+// Recupera lista de pacientes
+const pacientes = JSON.parse(localStorage.getItem("pacientes")) || [];
+const paciente = pacientes.find(p => p.nome === nomePaciente);
+
+let valorAtendimento = 0;
+let valorTotal = 0;
+let qtd = 0;
+
+if (paciente) {
+  qtd = paciente.qtd;
+  valorTotal = paciente.total;
+  // mostra o último valor informado (campo salvo no controle.html)
+  valorAtendimento = paciente.ultimoValor || 0;
+}
+
+document.getElementById("totalAtendimentosAno").textContent = qtd;
+document.getElementById("valorAtendimento").textContent = valorAtendimento.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+document.getElementById("valorTotal").textContent = (valorAtendimento * qtd).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+
+let diasSelecionados = {};
+
+window.onload = function() {
+  document.getElementById("ano").value = 2026; // define o ano padrão
+  gerarAno(); // gera o calendário sem precisar clicar
+};
+
+
+function gerarAno() {
+  const ano = parseInt(document.getElementById("ano").value);
+  const grade = document.getElementById("gradeCalendarios");
+  grade.innerHTML = "";
+
+  const nomesMeses = ["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
+
+  for (let mes = 0; mes < 12; mes++) {
+    const chave = nomePaciente + "_" + mes + "_" + ano;
+    diasSelecionados[mes] = JSON.parse(localStorage.getItem(chave)) || [];
+
+    const primeiroDia = new Date(ano, mes, 1).getDay();
+    const diasNoMes = new Date(ano, mes+1, 0).getDate();
+
+    let tabela = "<table><tr>";
+    const diasSemana = ["D","S","T","Q","Q","S","S"];
+    diasSemana.forEach(d => tabela += "<th>"+d+"</th>");
+    tabela += "</tr><tr>";
+
+    for (let i=0; i<primeiroDia; i++) tabela += "<td></td>";
+
+    for (let dia=1; dia<=diasNoMes; dia++) {
+      const diaSemana = (primeiroDia + dia - 1) % 7;
+      const marcado = diasSelecionados[mes].includes(dia) ? "class='atendimento'" : "";
+      tabela += `<td ${marcado} onclick="toggleAtendimento(${ano},${mes},${dia},this)">${dia}</td>`;
+      if (diaSemana===6 && dia!==diasNoMes) tabela += "</tr><tr>";
+    }
+
+    tabela += "</tr></table>";
+
+    const bloco = document.createElement("div");
+    bloco.className = "mes";
+    bloco.innerHTML = `<h3>${nomesMeses[mes]}</h3>` + tabela;
+    grade.appendChild(bloco);
+  }
+  atualizarInfo(ano);
+}
+
+function voltarControle() {
+  window.location.href = "novo 1.html"; // ✅ redireciona para a página de Controle de Atendimento
+}
+
+
+function toggleAtendimento(ano, mes, dia, celula) {
+  celula.classList.toggle("atendimento");
+  if (celula.classList.contains("atendimento")) {
+    if (!diasSelecionados[mes].includes(dia)) diasSelecionados[mes].push(dia);
+  } else {
+    diasSelecionados[mes] = diasSelecionados[mes].filter(d => d!==dia);
+  }
+  const chave = nomePaciente + "_" + mes + "_" + ano;
+  localStorage.setItem(chave, JSON.stringify(diasSelecionados[mes]));
+  atualizarInfo(ano);
+}
+function limparRegistros() {
+  const ano = parseInt(document.getElementById("ano").value);
+  for (let mes = 0; mes < 12; mes++) {
+    const chave = nomePaciente + "_" + mes + "_" + ano;
+    localStorage.removeItem(chave);
+    diasSelecionados[mes] = [];
+  }
+  gerarAno();
+  alert("Todos os registros do ano foram apagados!");
+}
+
+function gerarRelatorio() {
+  const ano = parseInt(document.getElementById("ano").value);
+
+  // Pega os meses que foram marcados nos checkboxes
+  const selecionados = Array.from(document.querySelectorAll("input[name='mes']:checked"))
+                            .map(cb => parseInt(cb.value));
+
+  let todasDatas = [];
+  for (let mes of selecionados) {
+    if (diasSelecionados[mes] && diasSelecionados[mes].length > 0) {
+      diasSelecionados[mes].forEach(dia => {
+        todasDatas.push(new Date(ano, mes, dia));
+      });
+    }
+  }
+  todasDatas.sort((a,b)=>a-b);
+
+const dadosRelatorio = {
+  nomePaciente: nomePaciente.toUpperCase(), // força maiúsculas
+  periodo: todasDatas.length > 0 ? 
+    todasDatas[0].toLocaleDateString("pt-BR")+" à "+todasDatas[todasDatas.length-1].toLocaleDateString("pt-BR") : "-",
+  qtd: todasDatas.length,
+  valorAtendimento,
+  total: todasDatas.length * valorAtendimento,
+  datas: todasDatas.map(d => d.toLocaleDateString("pt-BR"))
+};
+
+  // Salva os dados para o relatorio.html usar
+  localStorage.setItem("relatorioDados", JSON.stringify(dadosRelatorio));
+
+  // Abre o arquivo relatorio.html
+  window.open("relatorio.html", "_blank");
+}
+
+function atualizarInfo(ano) {
+  let todasDatas = [];
+  for (let mes=0; mes<12; mes++) {
+    if (diasSelecionados[mes] && diasSelecionados[mes].length>0) {
+      diasSelecionados[mes].forEach(dia => {
+        todasDatas.push(new Date(ano, mes, dia));
+      });
+    }
+  }
+
+  if (todasDatas.length>0) {
+    todasDatas.sort((a,b)=>a-b);
+    const inicio = todasDatas[0].toLocaleDateString("pt-BR");
+    const fim = todasDatas[todasDatas.length-1].toLocaleDateString("pt-BR");
+    document.getElementById("periodo").textContent = inicio + " à " + fim;
+  } else {
+    document.getElementById("periodo").textContent = "Nenhum atendimento";
+  }
+
+  const qtd = todasDatas.length;
+  const total = qtd * valorAtendimento;
+
+  document.getElementById("totalAtendimentosAno").textContent = qtd;
+  document.getElementById("valorAtendimento").textContent = valorAtendimento.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+  document.getElementById("valorTotal").textContent = total.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+}
+</script>
+
+</body>
+</html>
