@@ -21,6 +21,16 @@
       color: #006400;
       margin-bottom: 20px;
     }
+	.orientacao-fixa {
+  position: fixed;
+  bottom: -5px;   /* distância da borda inferior */
+  left: 0px;     /* distância da borda esquerda */
+  font-size: 12px;
+  color: #333;
+  font-style: italic;
+  max-width: 300px; /* limita largura para não ocupar muito espaço */
+}
+
 	
 /* Esconde o input original */
 #importarArquivo {
@@ -30,7 +40,7 @@
 /* Container com fundo cinza claro */
 .backup-container {
   position: fixed;
-  bottom: 20px;
+  bottom: 40px;
   left: 20px;
   background-color: #f0f0f0; /* cinza claro */
   padding: 15px 20px;
@@ -192,7 +202,8 @@
 
 /* CÉLULAS */
 .tabela-pacientes td {
-  padding: 10px;
+  padding: 4px 8px;
+    line-height: 0;   /* altura da linha mais compacta */
   background-color: #ffffff;
   border: none;
   border-bottom: 1px solid #e6e6e6;
@@ -236,6 +247,8 @@
   align-items: center;
   justify-content: center;
   gap: 7px;
+  padding: 4px 10px;   /* altura menor */
+  font-size: 12px;     /* fonte menor */
 }
 
 .ver-atendimento svg,
@@ -348,7 +361,9 @@
     <input type="file" id="importarArquivo" onchange="importarPacientes(event)">
   </div>
 </div>
-
+<p class="orientacao-fixa">
+  Caso queira acessar este site em outro navegador ou computador, exporte o arquivo dos pacientes antes.
+</p>
   <div class="valor" id="valorDiv">
     <p>Informe o valor do atendimento:</p>
 
@@ -361,6 +376,7 @@
     >
 
     <br>
+
 
     <button
       type="button"
