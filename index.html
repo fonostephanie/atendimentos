@@ -8,12 +8,34 @@
   <title>Controle de Atendimentos</title>
 
   <style>
-    body {
-      font-family: Segoe UI, sans-serif;
-      background-color: #E8EAE2;
-      text-align: center;
-      padding: 30px;
-    }
+body {
+  font-family: Segoe UI, sans-serif;
+  background-color: #E8EAE2;
+  text-align: center;
+  padding: 10px;   /* reduzido para aproximar do topo */
+  margin: 0;       /* remove margens extras */
+}
+
+.cabecalho {
+  width: 100%;
+  text-align: left;
+  margin: 10px 0 20px 0; /* menos espaço acima */
+}
+
+.titulo-principal {
+  font-size: 26px;
+  font-weight: bold;
+  color: #006400;
+  margin: 0 0 8px 20px; /* leve recuo à esquerda */
+}
+
+.linha-topo {
+  border: none;
+  height: 3px;
+  background-color: #006400;
+  margin: 0;
+}
+
 
     .titulo {
       font-size: 28px;
@@ -30,6 +52,15 @@
   font-style: italic;
   max-width: 300px; /* limita largura para não ocupar muito espaço */
 }
+.subtitulo {
+  font-family: Segoe UI, sans-serif;
+  font-size: 12px;
+  color: #333;
+  font-style: italic;
+  margin-top: -20px;
+  margin-bottom: 10px;
+}
+
 
 	
 /* Esconde o input original */
@@ -99,10 +130,12 @@
 }
 
     input {
-      padding: 8px;
+	width: 70%;          /* aumenta a largura (pode ser 100% se quiser ocupar toda a linha) */
+  max-width: 500px; 
+ padding: 8px;
 	  font-family: Segoe UI, sans-serif;
-      font-size: 16px;
-      margin: 10px;
+      font-size: 16p	x;
+      margin: 10px;width: 80%;          /* aumenta a largura (pode ser 100% se quiser ocupar toda a linha) */
       border: 2px solid #006400;
       border-radius: 6px;
       box-sizing: border-box;
@@ -154,7 +187,7 @@
     .valor {
      font-family: Segoe UI, sans-serif;
       margin-top: 20px;
-      display: none;
+      display: none
     }
 #listaPacientes {
   width: 60%;
@@ -163,7 +196,7 @@
   padding: 18px 15px 15px 15px;
   border: none;
   border-radius: 14px;
-  background-color: #ffffff;
+  background-color: #E0E0E0 ;
   display: none;
   box-sizing: border-box;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
@@ -265,14 +298,14 @@
 .tabela-pacientes td:first-child {
   border-right: 1px solid #d9d9d9;
 }
-    .assinatura {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      font-size: 14px;
-      color: #333333;
-      font-family: Segoe UI, sans-serif;
-    }
+.assinatura {
+  position: fixed;   /* mantém fixo na tela */
+  top: 40px;         /* distância do topo */
+  right: 20px;       /* distância da direita */
+  font-size: 14px;
+  color: #000000;
+  font-family: Segoe UI, sans-serif;
+}
 
     @media (max-width: 700px) {
       body {
@@ -293,19 +326,23 @@
         margin: 3px 0;
       }
 
-      .assinatura {
-        position: static;
-        margin-top: 30px;
-      }
     }
   </style>
 </head>
 
 <body>
+<!-- Cabeçalho principal -->
+<header class="cabecalho">
+  <h1 class="titulo-principal">SISTEMA DE ATENDIMENTOS</h1>
+  <hr class="linha-topo">
+</header>
 
 
 
   <div class="titulo">Controle de Atendimentos</div>
+<p class="subtitulo">
+  <span class="icone-usuario"></span> <em>Cadastre o novo paciente</em>
+</p>
 
   <input
     type="text"
@@ -733,8 +770,6 @@ botaoExcluir.innerHTML = `
   ) {
     localStorage.removeItem("pacienteAtual");
   }
-
-  alert("Paciente excluído com sucesso!");
 
   // Atualiza a relação automaticamente
   mostrarPacientes();
